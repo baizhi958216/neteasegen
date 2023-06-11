@@ -6,6 +6,8 @@
     ```bash
     sudo pacman -S firefox geckodriver
     ```
+- Windows
+    只需要安装 [Firefox](https://www.mozilla.org/en-US/firefox/windows/)
 
 ## 2. 项目初始化
 
