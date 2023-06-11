@@ -24,7 +24,7 @@ def getTop100(userId:str)->list:
     allTime.click()
 
     # 等待排行榜完成渲染
-    wait = WebDriverWait(driver,10)
+    wait = WebDriverWait(driver,5)
     wait.until(EC.presence_of_element_located((By.CLASS_NAME,'ttc')))
 
     elements = driver.find_elements(By.CLASS_NAME,'ttc')
