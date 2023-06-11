@@ -1,8 +1,9 @@
+import time
 from packages.netease import getTop100
 from packages.csvgen import csvgenerator
-from packages.wordcloudgen import pngGeneratorByList
+from packages.wordcloudgen import pngGeneratorByList,customPngGenByList
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.staticfiles import StaticFiles
 
 from starlette.responses import RedirectResponse
@@ -31,4 +32,19 @@ async def genwordcloudpng(userId):
     songList = getTop100(userId)
     filePath = './static/'+userId+'.png'
     pngGeneratorByList(songList,filePath)
+    return { 'userId' : userId, 'filePath' : userId+'.png' }
+
+@app.post('/gencustomcloudpng',status_code=200)
+async def gencustomcloudpng(
+    imagefile: UploadFile = File(), userId: str = Form()
+):
+    # 缓存一份用户上传图像
+    contents = await imagefile.read()
+    usercustomimage = userId+str(time.time())
+    with open('./static/'+usercustomimage,'wb') as binary:
+        binary.write(contents)
+    # 生成词云
+    songList = getTop100(userId)
+    filePath = './static/'+userId+'.png'
+    customPngGenByList(songList,'./static/'+usercustomimage,filePath)
     return { 'userId' : userId, 'filePath' : userId+'.png' }
