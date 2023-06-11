@@ -1,7 +1,7 @@
 from wordcloud import WordCloud
-from annotation import log
+from utils.annotation import log
 
-log('生成歌单词云图...')
+@log('生成png格式词云图...')
 def pngGeneratorByList(list:list,output:str='./词云图.png'):
     word = []
     for li in list:

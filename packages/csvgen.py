@@ -1,5 +1,5 @@
 import csv
-from annotation import log
+from utils.annotation import log
 
 @log("生成CSV...")
 def csvgenerator(list:list,location:str='./TOP100.csv')->bool:

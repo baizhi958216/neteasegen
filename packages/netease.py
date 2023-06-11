@@ -3,7 +3,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from annotation import log
+from utils.annotation import log
 
 @log("获取歌单...")
 def getTop100(userId:str)->list:

@@ -18,8 +18,6 @@ pip install -r requirements.txt
 python main.py userId=网易云用户ID gencsv 输出文件路径
 ```
 
-
-
 ## 生成词云图
 
 ```bash
