@@ -13,13 +13,21 @@
 pip install -r requirements.txt
 ```
 
-## 生成csv文件
+## 运行服务器
+
 ```bash
-python main.py userId=网易云用户ID gencsv 输出文件路径
+uvicorn server:app --reload
 ```
 
-## 生成词云图
+## 手动生成
+
+### 生成csv文件
+```bash
+python neteasegen.py userId=网易云用户ID gencsv 输出文件路径
+```
+
+### 生成词云图
 
 ```bash
-python main.py userId=网易云用户ID genwordcloud 输出文件路径
+python neteasegen.py userId=网易云用户ID genwordcloud 输出文件路径
 ```
