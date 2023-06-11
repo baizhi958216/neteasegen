@@ -4,7 +4,7 @@ from utils.annotation import log
 @log("生成CSV...")
 def csvgenerator(list:list,location:str='./TOP100.csv')->bool:
 
-    csvFile = open(location,'w+',newline='')
+    csvFile = open(location,'w+',newline='',encoding='utf-8')
 
     writeStat = False
 
