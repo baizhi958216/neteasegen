@@ -14,12 +14,16 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # 重定向至我的github page
-@app.get("/")
+@app.get("/",summary='重定向至我的github page')
 async def root():
     return RedirectResponse(url='https://baizhi958216.github.io')
 
 # 生成csv
-@app.get('/gencsv/{userId}',status_code=200)
+@app.get(
+        '/gencsv/{userId}',
+        status_code=200,
+        summary='生成CSV文件'
+        )
 async def gencsv(userId):
     songList = getTop100(userId)
     filePath = './static/'+userId+'.csv'
@@ -27,14 +31,23 @@ async def gencsv(userId):
     return { 'userId' : userId, 'filePath' : userId+'.csv' }
 
 # 生成默认词云图
-@app.get('/genwordcloudpng/{userId}',status_code=200)
+@app.get(
+        '/genwordcloudpng/{userId}',
+        status_code=200,
+        summary="生成词云图"
+        )
 async def genwordcloudpng(userId):
     songList = getTop100(userId)
     filePath = './static/'+userId+'.png'
     pngGeneratorByList(songList,filePath)
     return { 'userId' : userId, 'filePath' : userId+'.png' }
 
-@app.post('/gencustomcloudpng',status_code=200)
+@app.post(
+        '/gencustomcloudpng',
+        status_code=200,
+        description="生成自定义背景的词云图, 词云图大小为上传图片大小",
+        summary="上传图片，该图片作为词云图背景"
+        )
 async def gencustomcloudpng(
     imagefile: UploadFile = File(), userId: str = Form()
 ):
