@@ -3,12 +3,30 @@ from packages.netease import getTop100
 from packages.csvgen import csvgenerator
 from packages.wordcloudgen import pngGeneratorByList,customPngGenByList
 
-from fastapi import FastAPI, File, Form, UploadFile
+from typing import Annotated
+from fastapi import FastAPI, File, Form
 from fastapi.staticfiles import StaticFiles
 
 from starlette.responses import RedirectResponse
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+# 跨域处理
+
+origins = [
+    "http://localhost",
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # 静态资源目录挂载
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -38,9 +56,10 @@ async def gencsv(userId):
         )
 async def genwordcloudpng(userId):
     songList = getTop100(userId)
-    filePath = './static/'+userId+'.png'
+    fileName = str(time.time())
+    filePath = './static/'+fileName+'.png'
     pngGeneratorByList(songList,filePath)
-    return { 'userId' : userId, 'filePath' : userId+'.png' }
+    return { 'userId' : userId, 'filePath' : fileName+'.png' }
 
 @app.post(
         '/gencustomcloudpng',
@@ -49,15 +68,15 @@ async def genwordcloudpng(userId):
         summary="上传图片，该图片作为词云图背景"
         )
 async def gencustomcloudpng(
-    imagefile: UploadFile = File(), userId: str = Form()
+    imagefile: Annotated[bytes, File()], userId: Annotated[str, Form()]
 ):
     # 缓存一份用户上传图像
-    contents = await imagefile.read()
     usercustomimage = userId+str(time.time())
     with open('./static/'+usercustomimage,'wb') as binary:
-        binary.write(contents)
+        binary.write(imagefile)
     # 生成词云
     songList = getTop100(userId)
-    filePath = './static/'+userId+'.png'
+    fileName = str(time.time())
+    filePath = './static/'+fileName+'.png'
     customPngGenByList(songList,'./static/'+usercustomimage,filePath)
-    return { 'userId' : userId, 'filePath' : userId+'.png' }
+    return { 'userId' : userId, 'filePath' : fileName+'.png' }
