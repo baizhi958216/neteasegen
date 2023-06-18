@@ -2,6 +2,7 @@ import time
 from packages.netease import getTop100
 from packages.csvgen import csvgenerator
 from packages.wordcloudgen import pngGeneratorByList,customPngGenByList
+from packages.bilibilihot import bilihot
 
 from typing import Annotated
 from fastapi import FastAPI, File, Form
@@ -18,6 +19,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:5173",
+    "http://localhost:5174",
 ]
 
 app.add_middleware(
@@ -55,7 +57,7 @@ async def gencsv(userId):
         summary="生成词云图"
         )
 async def genwordcloudpng(userId):
-    songList = getTop100(userId)
+    songList = getTop100(userId,False)
     fileName = str(time.time())
     filePath = './static/'+fileName+'.png'
     pngGeneratorByList(songList,filePath)
@@ -75,8 +77,41 @@ async def gencustomcloudpng(
     with open('./static/'+usercustomimage,'wb') as binary:
         binary.write(imagefile)
     # 生成词云
-    songList = getTop100(userId)
+    songList = getTop100(userId, False)
     fileName = str(time.time())
     filePath = './static/'+fileName+'.png'
     customPngGenByList(songList,'./static/'+usercustomimage,filePath)
     return { 'userId' : userId, 'filePath' : fileName+'.png' }
+
+@app.get('/getweek/{userId}',status_code=200,
+        summary="所有周排行信息")
+async def getweek(userId):
+    songList = getTop100(userId,True)
+    fileName = str(time.time())
+    filePath = './static/'+fileName+'.png'
+    pngGeneratorByList(songList,filePath)
+    return { 'userId' : userId, 'filePath' : fileName+'.png' }
+
+@app.post(
+        '/getcustomweek',
+        status_code=200,
+        description="生成自定义背景的词云图, 词云图大小为上传图片大小",
+        summary="上传图片，该图片作为词云图背景"
+        )
+async def gencustomcloudpngweek(
+    imagefile: Annotated[bytes, File()], userId: Annotated[str, Form()]
+):
+    # 缓存一份用户上传图像
+    usercustomimage = userId+str(time.time())
+    with open('./static/'+usercustomimage,'wb') as binary:
+        binary.write(imagefile)
+    # 生成词云
+    songList = getTop100(userId, True)
+    fileName = str(time.time())
+    filePath = './static/'+fileName+'.png'
+    customPngGenByList(songList,'./static/'+usercustomimage,filePath)
+    return { 'userId' : userId, 'filePath' : fileName+'.png' }
+
+@app.get('/bilibilihot',status_code=200,summary='哔哩哔哩热搜')
+async def hot():
+    return bilihot()
