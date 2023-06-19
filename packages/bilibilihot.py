@@ -26,6 +26,11 @@ def bilihot(ranksize:int=10):
             item['coin'] = rawList[index]['stat']['coin']
             item['like'] = rawList[index]['stat']['like']
             item['bvid'] = rawList[index]['bvid']
+            try:
+                item['pub_location'] = rawList[index]['pub_location']
+            except:
+                item['pub_location'] = '未知'
+                
             data.append(item)
 
     return data
