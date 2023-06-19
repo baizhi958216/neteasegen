@@ -14,7 +14,7 @@ def getTop100(userId:str, Week:bool=False)->list:
 
     # 启动无GUI式webdriver
     options = Options()
-    # options.add_argument('--headless')
+    options.add_argument('--headless')
     # options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver = webdriver.Firefox(options=options,service=Service(executable_path='libs/geckodriver.exe'))
