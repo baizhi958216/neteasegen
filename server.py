@@ -112,6 +112,6 @@ def gencustomcloudpngweek(
     customPngGenByList(songList,'./static/'+usercustomimage,filePath)
     return { 'userId' : userId, 'filePath' : fileName+'.png' }
 
-@app.get('/bilibilihot',status_code=200,summary='哔哩哔哩热搜')
-def hot():
-    return bilihot()
+@app.get('/bilibilihot/{rankSize}',status_code=200,summary='哔哩哔哩热搜')
+def hot(rankSize):
+    return bilihot(int(rankSize))
