@@ -5,15 +5,19 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.annotation import log
+from utils.get_gecko_driver import get_gecko_driver
 
 @log("获取歌单")
 def getTop100(userId:str, Week:bool=False)->list:
 
+    get_gecko_driver()
+
     # 启动无GUI式webdriver
     options = Options()
-    options.add_argument("--headless")
+    # options.add_argument('--headless')
+    # options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-    driver = webdriver.Firefox(options=options,service=Service(executable_path='./libs'))
+    driver = webdriver.Firefox(options=options,service=Service(executable_path='libs/geckodriver.exe'))
 
     driver.get("https://music.163.com/#/user/songs/rank?id="+userId)
 

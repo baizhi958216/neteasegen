@@ -56,7 +56,7 @@ async def gencsv(userId):
         status_code=200,
         summary="生成词云图"
         )
-async def genwordcloudpng(userId):
+def genwordcloudpng(userId):
     songList = getTop100(userId,False)
     fileName = str(time.time())
     filePath = './static/'+fileName+'.png'
@@ -69,7 +69,7 @@ async def genwordcloudpng(userId):
         description="生成自定义背景的词云图, 词云图大小为上传图片大小",
         summary="上传图片，该图片作为词云图背景"
         )
-async def gencustomcloudpng(
+def gencustomcloudpng(
     imagefile: Annotated[bytes, File()], userId: Annotated[str, Form()]
 ):
     # 缓存一份用户上传图像
@@ -85,7 +85,7 @@ async def gencustomcloudpng(
 
 @app.get('/getweek/{userId}',status_code=200,
         summary="所有周排行信息")
-async def getweek(userId):
+def getweek(userId):
     songList = getTop100(userId,True)
     fileName = str(time.time())
     filePath = './static/'+fileName+'.png'
@@ -98,7 +98,7 @@ async def getweek(userId):
         description="生成自定义背景的词云图, 词云图大小为上传图片大小",
         summary="上传图片，该图片作为词云图背景"
         )
-async def gencustomcloudpngweek(
+def gencustomcloudpngweek(
     imagefile: Annotated[bytes, File()], userId: Annotated[str, Form()]
 ):
     # 缓存一份用户上传图像
@@ -113,5 +113,5 @@ async def gencustomcloudpngweek(
     return { 'userId' : userId, 'filePath' : fileName+'.png' }
 
 @app.get('/bilibilihot',status_code=200,summary='哔哩哔哩热搜')
-async def hot():
+def hot():
     return bilihot()
