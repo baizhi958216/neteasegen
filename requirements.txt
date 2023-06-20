@@ -1,9 +1,10 @@
 fastapi==0.97.0
 numpy==1.24.3
-Pillow==9.3.0
 Pillow==9.5.0
 pywin32==306
 Requests==2.31.0
 selenium==4.10.0
-starlette==0.28.0
 wordcloud==1.9.2
+uvicorn==0.22.0
+msvc-runtime==14.34.31931
+python-multipart==0.0.6
