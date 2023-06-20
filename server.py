@@ -12,6 +12,8 @@ from starlette.responses import RedirectResponse
 
 from fastapi.middleware.cors import CORSMiddleware
 
+import os
+
 app = FastAPI()
 
 # 跨域处理
@@ -31,6 +33,8 @@ app.add_middleware(
 )
 
 # 静态资源目录挂载
+if not os.path.exists("static"):
+    os.makedirs("static")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # 重定向至我的github page
